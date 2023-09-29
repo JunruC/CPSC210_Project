@@ -1,13 +1,6 @@
-# My Personal Project
+# NBA Player Trading Simulator
 
-## A subtitle
-
-A *bulleted* list:
-- item 1
-- item 2
-- item 3
-
-An example of text with **bold** and *italic* fonts.
+## Introduction
 
 I am going to design an application called **NBA Player Trading Simulator**. 
 This application can simulate possible trades of NBA players among different teams, 
