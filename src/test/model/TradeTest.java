@@ -68,6 +68,7 @@ class TradeTest {
         assertEquals(1, t2.getPlayers().size());
         assertEquals(p1, t2.getPlayers().get(0));
         assertEquals("Atlanta Hawks", p1.getTeam());
+        assertTrue(t.conductTrade(t1,t2,t));
     }
 
     @Test
@@ -85,6 +86,7 @@ class TradeTest {
         assertEquals(p1, t2.getPlayers().get(0));
         assertEquals("Atlanta Hawks", p1.getTeam());
         assertEquals("Denver Nuggets", p2.getTeam());
+        assertTrue(t.conductTrade(t1,t2,t));
     }
 
     @Test
@@ -107,5 +109,18 @@ class TradeTest {
         assertEquals("Atlanta Hawks", p1.getTeam());
         assertEquals("Denver Nuggets", p2.getTeam());
         assertEquals("Denver Nuggets", p3.getTeam());
+        assertTrue(t.conductTrade(t1,t2,t));
+    }
+
+    @Test
+    void testConductTradeFail() {
+        Player p3 = new Player("Golden State Warriors","Klay Thompson","SG",
+                33,198,99.8,43.219);
+        Team t1 = new Team("Denver Nuggets");
+        Team t2 = new Team("Atlanta Hawks");
+        t.getTradedPlayers().add(p1);
+        t.getTradedPlayers().add(p3);
+        t.conductTrade(t1,t2,t);
+        assertFalse(t.conductTrade(t1,t2,t));
     }
 }

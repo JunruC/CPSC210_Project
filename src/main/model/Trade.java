@@ -34,10 +34,10 @@ public class Trade {
     // Effects: for the ith player in the list of traded players, if the team of this player is the same as t1, he will
     //          be added to t2 and be removed from t1, and his team changes to the name of t2; if the team of this
     //          player is the same as t2, he will be added to t1 and be removed from t2, and his team changes to the
-    //          name of t1.
+    //          name of t1. Return true.
     //          If either of the above situation happens, the system will print "Trade completed!". Otherwise, the
-    //          system will print "Trade failed.".
-    public void conductTrade(Team t1, Team t2, Trade trade) {
+    //          system will print "Trade failed.". Return false.
+    public boolean conductTrade(Team t1, Team t2, Trade trade) {
         boolean success = true;
         for (int i = 0; i < trade.getTradeSize(); i++) {
             if (trade.getTradedPlayer(i).getTeam().equals(t1.getTeamName())) {
@@ -56,8 +56,10 @@ public class Trade {
         }
         if (success) {
             System.out.print("Trade completed!");
+            return true;
         } else {
             System.out.println("Trade failed.");
+            return false;
         }
     }
 
