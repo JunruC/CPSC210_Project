@@ -12,11 +12,10 @@ import java.util.Scanner;
 
 // NBA Player Trading Simulator Application
 public class NbaPlayerTradingSimulator {
-    private TradeList tl;
 
     // Effects: run the NBA Player Trading Simulator Application.
     public NbaPlayerTradingSimulator() {
-        tl = new TradeList();
+        TradeList tl = new TradeList();
         while (true) {
             Scanner scanner = new Scanner(System.in);
             printOptions();
@@ -125,7 +124,7 @@ public class NbaPlayerTradingSimulator {
     // Modifies: this
     // Effects: make the first side team of the trade and then process the first team.
     public void makeFirstTeam(TradeList tl) {
-        String line = "";
+        String line;
         String splitBy = ",";
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the team you want to send players away:");
@@ -149,7 +148,7 @@ public class NbaPlayerTradingSimulator {
     // Modifies: this
     // Effects: make the second side team of the trade and then process the second team.
     public void makeSecondTeam(TradeList tl) {
-        String line = "";
+        String line;
         String splitBy = ",";
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the team you want to get players from:");
