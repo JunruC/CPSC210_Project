@@ -17,8 +17,9 @@ Therefore, I want to design an application that allows me to view the trades fro
 
 ## User Stories
 - As a user, I want to be able to add a trade to the pending trade list and completed trade list.
-- As a user, I want to be able to add a team to both sides of the trading team list.
 - As a user, I want to be able to view all players in teams that conduct trades.
+- As a user, I want to be able to add a player to a trade.
 - As a user, I want to be able to judge whether the team's total salary is above the tax line.
 - As a user, I want to be able to select a player in teams that conduct trades and view this player in detail.
 - As a user, I want to be able to conduct trades by exchanging players between two teams.
+- As a user, I want to be able to view all completed trades and the salary situation of each team in these trades.
