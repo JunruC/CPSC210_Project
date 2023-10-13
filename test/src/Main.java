@@ -1,7 +1,5 @@
-package ui;
-
 public class Main {
     public static void main(String[] args) {
-        new NbaPlayerTradingSimulator();
+        System.out.println("Hello world!");
     }
 }
