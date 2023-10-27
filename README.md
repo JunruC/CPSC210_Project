@@ -23,3 +23,5 @@ Therefore, I want to design an application that allows me to view the trades fro
 - As a user, I want to be able to select a player in teams that conduct trades and view this player in detail.
 - As a user, I want to be able to conduct trades by exchanging players between two teams.
 - As a user, I want to be able to view all completed trades and the salary situation of each team in these trades.
+- As a user, I want to be able to save all the data in the trade list when I quit the app.
+- As a user, I want to be able to read all the data in the files when I start the app.

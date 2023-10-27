@@ -8,95 +8,51 @@ import java.util.List;
 public class TradeList {
     private List<Trade> pendingTrades;    // a list of pending trades.
     private List<Trade> completedTrades;  // a list of completed trades.
-    private List<Team> teamOne;           // a list of first side teams in the trades.
-    private List<Team> teamTwo;           // a list of second side teams in the trades.
+    private List<Team> pendingTeamOne;    // a list of first side teams in the pending trades.
+    private List<Team> pendingTeamTwo;    // a list of second side teams in the pending trades.
+    private List<Team> completedTeamOne;  // a list of first side teams in the completed trades.
+    private List<Team> completedTeamTwo;  // a list of second side teams in the completed trades.
+    private List<Boolean> success;        // a list of successes or failures of the trades.
 
     // Effects: construct a list of trades with an empty list of pending trades, an empty list of completed trades,
-    //          an empty list of first side teams in the trades, and an empty list of second side teams in the trades.
+    //          an empty list of first side teams in the pending trades, an empty list of second side teams in the
+    //          pending trades, an empty list of first side teams in the completed trades, an empty list of second side
+    //          teams in the completed trades, and an empty list of successes or failures of the trades.
     public TradeList() {
         this.pendingTrades = new ArrayList<>();
         this.completedTrades = new ArrayList<>();
-        this.teamOne = new ArrayList<>();
-        this.teamTwo = new ArrayList<>();
-    }
-
-    // Modifies: this
-    // Effects: add trade t to the list of pending trades.
-    public void addTradeToPending(Trade t) {
-        this.pendingTrades.add(t);
-    }
-
-    // Modifies: this
-    // Effects: add trade t to the list of completed trades.
-    public void addTradeToCompleted(Trade t) {
-        this.completedTrades.add(t);
-    }
-
-    // Modifies: this
-    // Effects: change the list of pending trades to an empty list.
-    public void clearPendingTrades() {
-        this.pendingTrades = new ArrayList<>();
-    }
-
-    // Modifies: this
-    // Effects: add team t1 to the list of first side teams in the trades.
-    public void addTeamOne(Team t1) {
-        this.teamOne.add(t1);
-    }
-
-    // Modifies: this
-    // Effects: add team t2 to the list of second side teams in the trades.
-    public void addTeamTwo(Team t2) {
-        this.teamTwo.add(t2);
-    }
-
-    // Requires: 0 <= i < getPendingTradesSize() + getCompletedTradesSize()
-    // Effects: return the ith team in the list of first side teams in the trades.
-    public Team getTeamOne(int i) {
-        return this.teamOne.get(i);
-    }
-
-    // Requires: 0 <= i < getPendingTradesSize() + getCompletedTradesSize()
-    // Effects: return the ith team in the list of second side teams in the trades.
-    public Team getTeamTwo(int i) {
-        return this.teamTwo.get(i);
-    }
-
-    // Requires: 0 <= i < getPendingTradesSize()
-    // Effects: return the ith trade in the list of pending trades.
-    public Trade getTradeFromPending(int i) {
-        return this.pendingTrades.get(i);
-    }
-
-    // Requires: 0 <= i < getCompletedTradesSize()
-    // Effects: return the ith trade in the list of completed trades.
-    public Trade getTradeFromCompleted(int i) {
-        return this.completedTrades.get(i);
-    }
-
-    // Effects: return the size of the list of pending trades.
-    public int getPendingTradesSize() {
-        return this.pendingTrades.size();
-    }
-
-    // Effects: return the size of the list of completed trades.
-    public int getCompletedTradesSize() {
-        return this.completedTrades.size();
+        this.pendingTeamOne = new ArrayList<>();
+        this.pendingTeamTwo = new ArrayList<>();
+        this.completedTeamOne = new ArrayList<>();
+        this.completedTeamTwo = new ArrayList<>();
+        this.success = new ArrayList<>();
     }
 
     public List<Trade> getPendingTrades() {
-        return pendingTrades;
+        return this.pendingTrades;
     }
 
     public List<Trade> getCompletedTrades() {
-        return completedTrades;
+        return this.completedTrades;
     }
 
-    public List<Team> getAllTeamOne() {
-        return teamOne;
+    public List<Team> getPendingTeamOne() {
+        return this.pendingTeamOne;
     }
 
-    public List<Team> getAllTeamTwo() {
-        return teamTwo;
+    public List<Team> getPendingTeamTwo() {
+        return this.pendingTeamTwo;
+    }
+
+    public List<Team> getCompletedTeamOne() {
+        return this.completedTeamOne;
+    }
+
+    public List<Team> getCompletedTeamTwo() {
+        return this.completedTeamTwo;
+    }
+
+    public List<Boolean> getSuccess() {
+        return this.success;
     }
 }

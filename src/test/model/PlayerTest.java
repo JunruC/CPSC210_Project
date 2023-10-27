@@ -24,10 +24,4 @@ class PlayerTest {
         assertEquals(99.8, p.getWeight());
         assertEquals(43.219, p.getSalary());
     }
-
-    @Test
-    void testChangeTeam() {
-        p.changeTeam("Miami Heat");
-        assertEquals("Miami Heat", p.getTeam());
-    }
 }

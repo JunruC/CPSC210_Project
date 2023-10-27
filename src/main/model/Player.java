@@ -24,13 +24,6 @@ public class Player {
         this.salary = salary;
     }
 
-    // Requires: newTeam must not be the same as this.team.
-    // Modifies: this
-    // Effects: change the team of player to newTeam.
-    public void changeTeam(String newTeam) {
-        this.team = newTeam;
-    }
-
     public String getTeam() {
         return team;
     }

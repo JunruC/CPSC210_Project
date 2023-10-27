@@ -22,43 +22,6 @@ class TradeTest {
     }
 
     @Test
-    void testAddPlayerToTradeOnce() {
-        t.addPlayerToTrade(p1);
-        assertEquals(1, t.getTradedPlayers().size());
-        assertEquals(p1, t.getTradedPlayers().get(0));
-    }
-
-    @Test
-    void testAddPlayerToTradeMultipleTimes() {
-        Player p2 = new Player("Denver Nuggets", "Jamal Murray", "PG",
-                26, 193, 97.5, 33.833);
-        t.addPlayerToTrade(p1);
-        t.addPlayerToTrade(p2);
-        assertEquals(2, t.getTradedPlayers().size());
-        assertEquals(p1, t.getTradedPlayers().get(0));
-        assertEquals(p2, t.getTradedPlayers().get(1));
-    }
-
-    @Test
-    void testGetTradedPlayer() {
-        Player p2 = new Player("Denver Nuggets", "Jamal Murray", "PG",
-                26, 193, 97.5, 33.833);
-        t.getTradedPlayers().add(p1);
-        t.getTradedPlayers().add(p2);
-        assertEquals(p1, t.getTradedPlayer(0));
-        assertEquals(p2, t.getTradedPlayer(1));
-    }
-
-    @Test
-    void testGetTradeSize() {
-        Player p2 = new Player("Denver Nuggets", "Jamal Murray", "PG",
-                26, 193, 97.5, 33.833);
-        t.getTradedPlayers().add(p1);
-        t.getTradedPlayers().add(p2);
-        assertEquals(2, t.getTradeSize());
-    }
-
-    @Test
     void testConductTradeOnePlayer() {
         Team t1 = new Team("Denver Nuggets");
         Team t2 = new Team("Atlanta Hawks");

@@ -4,8 +4,11 @@ import model.Player;
 import model.Team;
 import model.Trade;
 import model.TradeList;
+import persistence.Read;
+import persistence.Save;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -16,24 +19,22 @@ public class NbaPlayerTradingSimulator {
     // Effects: run the NBA Player Trading Simulator Application.
     public NbaPlayerTradingSimulator() {
         TradeList tl = new TradeList();
+        readData(tl);
         while (true) {
             Scanner scanner = new Scanner(System.in);
             printOptions();
             int option = scanner.nextInt();
             if (option == 4) {
+                saveData(tl);
                 System.out.println("Quit successfully.");
                 break;
             } else {
-                switch (option) {
-                    case 1:
-                        optionOne(tl);
-                        break;
-                    case 2:
-                        optionTwo(tl);
-                        break;
-                    case 3:
-                        optionThree(tl);
-                        break;
+                if (option == 1) {
+                    optionOne(tl);
+                } else if (option == 2) {
+                    optionTwo(tl);
+                } else if (option == 3) {
+                    optionThree(tl);
                 }
             }
         }
@@ -51,6 +52,8 @@ public class NbaPlayerTradingSimulator {
     // Modifies: this
     // Effects: Process option 1.
     public void optionOne(TradeList tl) {
+        Trade t = new Trade();
+        tl.getPendingTrades().add(t);
         makeFirstTeam(tl);
         makeSecondTeam(tl);
         while (true) {
@@ -62,6 +65,8 @@ public class NbaPlayerTradingSimulator {
             if (input == 2) {
                 break;
             }
+            Trade t0 = new Trade();
+            tl.getPendingTrades().add(t0);
             makeFirstTeam(tl);
             makeSecondTeam(tl);
         }
@@ -70,36 +75,70 @@ public class NbaPlayerTradingSimulator {
     // Modifies: this
     // Effects: process option 2.
     public void optionTwo(TradeList tl) {
-        if (tl.getPendingTradesSize() == 0) {
+        if (tl.getPendingTrades().size() == 0) {
             System.out.println("There is no trade to be conducted now.");
         } else {
-            for (int i = 0; i < tl.getPendingTradesSize(); i++) {
-                Trade tradeInProcess = tl.getTradeFromPending(i);
-                System.out.println("No." + (i + 1) + ": ");
-                tradeInProcess.conductTrade(tl.getTeamOne(i), tl.getTeamTwo(i), tradeInProcess);
-                tl.addTradeToCompleted(tradeInProcess);
+            for (int i = 0; i < tl.getPendingTrades().size(); i++) {
+                processTrade(tl, i);
             }
-            tl.clearPendingTrades();
+            tl.getPendingTrades().clear();
+            tl.getPendingTeamOne().clear();
+            tl.getPendingTeamTwo().clear();
         }
-        System.out.println("");
     }
 
+    // Requires: 0 <= i < tl.getPendingTrades().size()
+    // Modifies: this
+    // Effects: process the trade in pending trades.
+    public void processTrade(TradeList tl, int i) {
+        Trade tradeInProcess = tl.getPendingTrades().get(i);
+        System.out.println("No." + (i + 1) + ": ");
+        Team ct1 = new Team(tl.getPendingTeamOne().get(i).getTeamName());
+        for (int j = 0; j < tl.getPendingTeamOne().get(i).getPlayers().size(); j++) {
+            ct1.getPlayers().add(tl.getPendingTeamOne().get(i).getPlayers().get(j));
+        }
+        Team ct2 = new Team(tl.getPendingTeamTwo().get(i).getTeamName());
+        for (int k = 0; k < tl.getPendingTeamTwo().get(i).getPlayers().size(); k++) {
+            ct2.getPlayers().add(tl.getPendingTeamTwo().get(i).getPlayers().get(k));
+        }
+        Boolean success = tradeInProcess.conductTrade(tl.getPendingTeamOne().get(i),
+                tl.getPendingTeamTwo().get(i), tradeInProcess);
+        tl.getSuccess().add(success);
+        System.out.println("");
+        tl.getCompletedTrades().add(tradeInProcess);
+        if (success) {
+            tl.getCompletedTeamOne().add(tl.getPendingTeamOne().get(i));
+            tl.getCompletedTeamTwo().add(tl.getPendingTeamTwo().get(i));
+        } else {
+            tl.getCompletedTeamOne().add(ct1);
+            tl.getCompletedTeamTwo().add(ct2);
+        }
+    }
 
     // Effects: process option 3.
     public void optionThree(TradeList tl) {
-        for (int i = 0; i < tl.getCompletedTradesSize(); i++) {
-            Trade trade = tl.getTradeFromCompleted(i);
-            Team t1 = tl.getTeamOne(i);
-            Team t2 = tl.getTeamTwo(i);
-            for (int j = 0; j < trade.getTradeSize(); j++) {
-                Player p = trade.getTradedPlayer(j);
-                if (p.getTeam().equals(t1.getTeamName())) {
-                    System.out.println(p.getName() + " goes to " + t2.getTeamName());
+        if (tl.getCompletedTrades().size() == 0) {
+            System.out.println("No trade completed yet.");
+        } else {
+            for (int i = 0; i < tl.getCompletedTrades().size(); i++) {
+                System.out.println("Trade " + (i + 1) + ": ");
+                if (tl.getSuccess().get(i)) {
+                    Trade trade = tl.getCompletedTrades().get(i);
+                    Team t1 = tl.getCompletedTeamOne().get(i);
+                    Team t2 = tl.getCompletedTeamTwo().get(i);
+                    for (int j = 0; j < trade.getTradedPlayers().size(); j++) {
+                        Player p = trade.getTradedPlayers().get(j);
+                        if (p.getTeam().equals(t1.getTeamName())) {
+                            System.out.println(p.getName() + " goes to " + t2.getTeamName());
+                        } else {
+                            System.out.println(p.getName() + " goes to " + t1.getTeamName());
+                        }
+                    }
+                    salaryReport(t1, t2);
                 } else {
-                    System.out.println(p.getName() + " goes to " + t1.getTeamName());
+                    System.out.println("This trade failed.");
                 }
             }
-            salaryReport(t1, t2);
         }
     }
 
@@ -122,7 +161,7 @@ public class NbaPlayerTradingSimulator {
     }
 
     // Modifies: this
-    // Effects: make the first side team of the trade and then process the first team.
+    // Effects: make the first side team of the trade and then process the team.
     public void makeFirstTeam(TradeList tl) {
         String line;
         String splitBy = ",";
@@ -136,17 +175,18 @@ public class NbaPlayerTradingSimulator {
                 String[] data = line.split(splitBy);
                 Player p = new Player(data[0],data[1],data[2],Integer.parseInt(data[3]),Integer.parseInt(data[4]),
                         Double.parseDouble(data[5]),Double.parseDouble(data[6]));
-                t1.addPlayer(p);
+                t1.getPlayers().add(p);
             }
+            tl.getPendingTeamOne().add(t1);
+            processFirstTeam(t1, tl);
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error");
+            System.out.println("Team does not exist.");
+            makeFirstTeam(tl);
         }
-        processFirstTeam(t1, tl);
     }
 
     // Modifies: this
-    // Effects: make the second side team of the trade and then process the second team.
+    // Effects: make the second side team of the trade and then process the team.
     public void makeSecondTeam(TradeList tl) {
         String line;
         String splitBy = ",";
@@ -160,13 +200,14 @@ public class NbaPlayerTradingSimulator {
                 String[] data = line.split(splitBy);
                 Player p = new Player(data[0],data[1],data[2],Integer.parseInt(data[3]),Integer.parseInt(data[4]),
                         Double.parseDouble(data[5]),Double.parseDouble(data[6]));
-                t2.addPlayer(p);
+                t2.getPlayers().add(p);
             }
+            tl.getPendingTeamTwo().add(t2);
+            processSecondTeam(t2, tl);
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error");
+            System.out.println("Team does not exist.");
+            makeSecondTeam(tl);
         }
-        processSecondTeam(t2, tl);
     }
 
     // Modifies: this
@@ -222,8 +263,8 @@ public class NbaPlayerTradingSimulator {
 
     // Effects: process option 1 when process the first team.
     public void firstTeamOptionOne(Team t, TradeList tl) {
-        for (int i = 0; i < t.getTeamSize(); i++) {
-            System.out.println(t.getPlayer(i).getName());
+        for (int i = 0; i < t.getPlayers().size(); i++) {
+            System.out.println(t.getPlayers().get(i).getName());
         }
         processFirstTeam(t, tl);
     }
@@ -234,8 +275,9 @@ public class NbaPlayerTradingSimulator {
         System.out.println("Enter the name of the player you want to view:");
         String name = s2.nextLine();
         boolean findPlayer = false;
-        for (int i = 0; i < t.getTeamSize(); i++) {
-            if (name.equals(t.getPlayer(i).getName())) {
+        for (int i = 0; i < t.getPlayers().size(); i++) {
+            if (name.equals(t.getPlayers().get(i).getName())) {
+                printPlayerInformation(t, i);
                 findPlayer = true;
                 break;
             }
@@ -252,13 +294,11 @@ public class NbaPlayerTradingSimulator {
         Scanner s3 = new Scanner(System.in);
         System.out.println("Enter the name of the player you want to send away:");
         String player = s3.nextLine();
-        Trade tp = new Trade();
         boolean playerInTeam = false;
-        for (int i = 0; i < t.getTeamSize(); i++) {
-            if (player.equals(t.getPlayer(i).getName())) {
-                tp.addPlayerToTrade(t.getPlayer(i));
-                tl.addTradeToPending(tp);
-                tl.addTeamOne(t);
+        for (int i = 0; i < t.getPlayers().size(); i++) {
+            if (player.equals(t.getPlayers().get(i).getName())) {
+                Trade trade = tl.getPendingTrades().get(tl.getPendingTrades().size() - 1);
+                trade.getTradedPlayers().add(t.getPlayers().get(i));
                 playerInTeam = true;
                 break;
             }
@@ -280,8 +320,8 @@ public class NbaPlayerTradingSimulator {
 
     // Effects: process option 1 when process the second team.
     public void secondTeamOptionOne(Team t, TradeList tl) {
-        for (int i = 0; i < t.getTeamSize(); i++) {
-            System.out.println(t.getPlayer(i).getName());
+        for (int i = 0; i < t.getPlayers().size(); i++) {
+            System.out.println(t.getPlayers().get(i).getName());
         }
         processSecondTeam(t, tl);
     }
@@ -292,8 +332,8 @@ public class NbaPlayerTradingSimulator {
         System.out.println("Enter the name of the player you want to view:");
         String name = s2.nextLine();
         boolean findPlayer = false;
-        for (int i = 0; i < t.getTeamSize(); i++) {
-            if (name.equals(t.getPlayer(i).getName())) {
+        for (int i = 0; i < t.getPlayers().size(); i++) {
+            if (name.equals(t.getPlayers().get(i).getName())) {
                 printPlayerInformation(t, i);
                 findPlayer = true;
                 break;
@@ -309,13 +349,13 @@ public class NbaPlayerTradingSimulator {
     // Effects: process option 3 when process the second team.
     public void secondTeamOptionThree(Team t, TradeList tl) {
         Scanner s3 = new Scanner(System.in);
-        System.out.println("Enter the name of the player you want to send away:");
+        System.out.println("Enter the name of the player you want to get from:");
         String player = s3.nextLine();
         boolean playerInTeam = false;
-        for (int i = 0; i < t.getTeamSize(); i++) {
-            if (player.equals(t.getPlayer(i).getName())) {
-                tl.getTradeFromPending(tl.getPendingTradesSize() - 1).addPlayerToTrade(t.getPlayer(i));
-                tl.addTeamTwo(t);
+        for (int i = 0; i < t.getPlayers().size(); i++) {
+            if (player.equals(t.getPlayers().get(i).getName())) {
+                Trade trade = tl.getPendingTrades().get(tl.getPendingTrades().size() - 1);
+                trade.getTradedPlayers().add(t.getPlayers().get(i));
                 playerInTeam = true;
                 break;
             }
@@ -329,12 +369,92 @@ public class NbaPlayerTradingSimulator {
     // Requires: 0 <= i < t.getTeamSize()
     // Effects: print the information of the player.
     public void printPlayerInformation(Team t, int i) {
-        System.out.println("Team: " + t.getPlayer(i).getTeam());
-        System.out.println("Name: " + t.getPlayer(i).getName());
-        System.out.println("Position: " + t.getPlayer(i).getPosition());
-        System.out.println("Age: " + t.getPlayer(i).getAge());
-        System.out.println("Height: " + t.getPlayer(i).getHeight() + "cm");
-        System.out.println("Weight: " + t.getPlayer(i).getWeight() + "kg");
-        System.out.println("Salary: " + t.getPlayer(i).getSalary() + " million dollars");
+        System.out.println("Team: " + t.getPlayers().get(i).getTeam());
+        System.out.println("Name: " + t.getPlayers().get(i).getName());
+        System.out.println("Position: " + t.getPlayers().get(i).getPosition());
+        System.out.println("Age: " + t.getPlayers().get(i).getAge());
+        System.out.println("Height: " + t.getPlayers().get(i).getHeight() + "cm");
+        System.out.println("Weight: " + t.getPlayers().get(i).getWeight() + "kg");
+        System.out.println("Salary: " + t.getPlayers().get(i).getSalary() + " million dollars");
+    }
+
+    // Effects: read the data in the json files.
+    public void readData(TradeList tl) {
+        Scanner scanner = new Scanner(System.in);
+        askRead();
+        int option = scanner.nextInt();
+        if (option == 1) {
+            readDataOptionOne(tl);
+        } else if (option == 2) {
+            readDataOptionTwo();
+        }
+    }
+
+    // Effects: ask the users whether they want to reload the recent progress.
+    public void askRead() {
+        System.out.println("Do you want to reload the recent progress?");
+        System.out.println("1. Yes");
+        System.out.println("2. No");
+    }
+
+    // Effects: process option one when read data.
+    public void readDataOptionOne(TradeList tl) {
+        Read r = new Read();
+        try {
+            r.readPendingTrades(tl, "PendingTradesFile.json");
+            r.readCompletedTrades(tl, "CompletedTradesFile.json");
+            r.readPendingTeamOne(tl, "PendingTeamOneFile.json");
+            r.readPendingTeamTwo(tl, "PendingTeamTwoFile.json");
+            r.readCompletedTeamOne(tl, "CompletedTeamOneFile.json");
+            r.readCompletedTeamTwo(tl, "CompletedTeamTwoFile.json");
+            r.readSuccess(tl, "SuccessFile.json");
+        } catch (IOException e) {
+            System.out.println("Unable to read the data.");
+        }
+    }
+
+    // Effects: process option two when read data.
+    public void readDataOptionTwo() {
+        Save s = new Save();
+        try {
+            s.clearData("PendingTradesFile.json","CompletedTradesFile.json","PendingTeamOneFile.json",
+                    "PendingTeamTwoFile.json","CompletedTeamOneFile.json","CompletedTeamTwoFile.json",
+                    "SuccessFile.json");
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to clear the data.");
+        }
+    }
+
+    // Effects: save the data in the trade list.
+    public void saveData(TradeList tl) {
+        Scanner scanner = new Scanner(System.in);
+        askSave();
+        int option = scanner.nextInt();
+        if (option == 1) {
+            saveDataOptionOne(tl);
+        }
+    }
+
+    // Effects: ask the users whether they want to save the current progress.
+    public void askSave() {
+        System.out.println("Do you want to save the current progress?");
+        System.out.println("1. Yes");
+        System.out.println("2. No");
+    }
+
+    // Effects: process option one when save data.
+    public void saveDataOptionOne(TradeList tl) {
+        Save s = new Save();
+        try {
+            s.savePendingTrades(tl, "PendingTradesFile.json");
+            s.saveCompletedTrades(tl, "CompletedTradesFile.json");
+            s.savePendingTeamOne(tl, "PendingTeamOneFile.json");
+            s.savePendingTeamTwo(tl, "PendingTeamTwoFile.json");
+            s.saveCompletedTeamOne(tl, "CompletedTeamOneFile.json");
+            s.saveCompletedTeamTwo(tl, "CompletedTeamTwoFile.json");
+            s.saveSuccess(tl, "SuccessFile.json");
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save the data.");
+        }
     }
 }
