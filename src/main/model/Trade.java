@@ -35,10 +35,8 @@ public class Trade {
             }
         }
         if (successful) {
-            System.out.print("Trade completed!");
             return true;
         } else {
-            System.out.println("Trade failed.");
             return false;
         }
     }
