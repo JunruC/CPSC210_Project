@@ -36,6 +36,8 @@ Therefore, I want to design an application that allows me to view the trades fro
 - You can generate the second required action related to the user story "adding multiple Trades to a TradeList" by 
   clicking the button labelled "Yes" when the message window asks the user "Do you want to conduct these trades?" to
   remove all Trades from the TradeList.
+- You can generate the third required action related to the user story "adding multiple Trades to a TradeList" by
+  clicking the button labelled "View pending trades" to view all Trades in TradeList.
 - You can locate my visual component by looking at code: JLabel image = new JLabel(new ImageIcon("data/NBA_logo.png"));
   panel.add(image); where I add the image to the panel. The image that represents an NBA logo which comes from 
   https://www.nba.com/news/first-look-nbas-refreshed-logo-2017-18-seasonis is in the data folder.
