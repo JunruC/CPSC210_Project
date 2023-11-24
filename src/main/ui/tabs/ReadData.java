@@ -10,13 +10,15 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+// Represents the tab when reading the data.
 public class ReadData extends JFrame {
-    public static final int WIDTH = 400;
-    public static final int HEIGHT = 300;
-    private JLabel question;
-    private JRadioButton option1;
-    private JRadioButton option2;
+    public static final int WIDTH = 400;   // width of the tab
+    public static final int HEIGHT = 600;  // height of the tab
+    private JLabel question;               // question in the tab
+    private JRadioButton option1;          // option one in the tab
+    private JRadioButton option2;          // option two in the tab
 
+    // Effects: construct the tab with title, size, question, and options.
     public ReadData() {
         TradeList tl = new TradeList();
         setTitle("NBA Player Trading Simulator");
@@ -27,14 +29,13 @@ public class ReadData extends JFrame {
         option2 = new JRadioButton("No");
         option1.setFocusable(false);
         option2.setFocusable(false);
-        ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(option1);
-        buttonGroup.add(option2);
         ActionListener radioListener = e -> checkDecision(tl);
         option1.addActionListener(radioListener);
         option2.addActionListener(radioListener);
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 1));
+        panel.setLayout(new GridLayout(4, 1));
+        JLabel image = new JLabel(new ImageIcon("data/NBA_logo.png"));
+        panel.add(image);
         panel.add(question);
         panel.add(option1);
         panel.add(option2);
@@ -42,6 +43,7 @@ public class ReadData extends JFrame {
         setVisible(true);
     }
 
+    // Effects: guide to the new tab according to the user decision.
     public void checkDecision(TradeList tl) {
         if (option1.isSelected()) {
             dispose();

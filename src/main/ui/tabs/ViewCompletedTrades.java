@@ -8,13 +8,15 @@ import model.TradeList;
 import javax.swing.*;
 import java.awt.*;
 
+// Represents the tab when viewing completed trades.
 public class ViewCompletedTrades extends JFrame {
-    public static final int WIDTH = 400;
-    public static final int HEIGHT = 800;
-    private JTextArea display;
-    private JButton submit;
-    public static final String TAB = "    ";
+    public static final int WIDTH = 400;     // width of the tab
+    public static final int HEIGHT = 1200;   // height of the tab
+    private JTextArea display;               // display are in the tab
+    private JButton submit;                  // ok button in the tab
+    public static final String TAB = "    "; // indent
 
+    // Effects: construct the tab with title, size, display area, and ok button.
     public ViewCompletedTrades(TradeList tl) {
         setTitle("NBA Player Trading Simulator");
         setSize(WIDTH, HEIGHT);
@@ -33,6 +35,8 @@ public class ViewCompletedTrades extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1));
+        JLabel image = new JLabel(new ImageIcon("data/NBA_logo.png"));
+        panel.add(image);
         panel.add(new JScrollPane(display));
         panel.add(submit);
 
@@ -40,6 +44,7 @@ public class ViewCompletedTrades extends JFrame {
         setVisible(true);
     }
 
+    // Effects: print the information of completed trades.
     public String printCompletedTrades(TradeList tl) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tl.getCompletedTrades().size(); i++) {
@@ -66,6 +71,7 @@ public class ViewCompletedTrades extends JFrame {
         return sb.toString();
     }
 
+    // Effects: print the report of the trade.
     public void tradeReport(Team t1, Team t2, StringBuilder sb) {
         t1.calculateTotalSalary();
         sb.append(TAB + "New group of players in " + t1.getTeamName() + " are:").append("\n");

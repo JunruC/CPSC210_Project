@@ -10,13 +10,15 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+// Represents the tab when making the second team.
 public class MakeSecondTeam extends JFrame {
-    public static final int WIDTH = 400;
-    public static final int HEIGHT = 300;
-    private JLabel question;
-    private JTextField answer;
-    private JButton submit;
+    public static final int WIDTH = 400;   // width of the tab
+    public static final int HEIGHT = 600;  // height of the tab
+    private JLabel question;               // question in the tab
+    private JTextField answer;             // answer area in the tab
+    private JButton submit;                // submit button in the tab
 
+    // Effects: construct the tab with title, size, question, answer area, and submit button.
     public MakeSecondTeam(TradeList tl) {
         setTitle("NBA Player Trading Simulator");
         setSize(WIDTH, HEIGHT);
@@ -33,6 +35,8 @@ public class MakeSecondTeam extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1));
+        JLabel image = new JLabel(new ImageIcon("data/NBA_logo.png"));
+        panel.add(image);
         panel.add(question);
         panel.add(answer);
         panel.add(submit);
@@ -41,6 +45,7 @@ public class MakeSecondTeam extends JFrame {
         setVisible(true);
     }
 
+    // Effects: guide to the new tab according to the user decision.
     public void checkDecision(TradeList tl, String teamName) {
         String line;
         String splitBy = ",";

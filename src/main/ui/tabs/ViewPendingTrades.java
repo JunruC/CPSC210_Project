@@ -6,13 +6,15 @@ import model.TradeList;
 import javax.swing.*;
 import java.awt.*;
 
+// Represents the tab when viewing pending trades.
 public class ViewPendingTrades extends JFrame {
-    public static final int WIDTH = 400;
-    public static final int HEIGHT = 400;
-    private JTextArea display;
-    private JButton submit;
-    public static final String TAB = "    ";
+    public static final int WIDTH = 400;      // width of the tab
+    public static final int HEIGHT = 800;     // height of the tab
+    private JTextArea display;                // display area in the tab
+    private JButton submit;                   // ok button in the tab
+    public static final String TAB = "    ";  // indent
 
+    // Effects: construct the tab with title, size, display area, and ok button.
     public ViewPendingTrades(TradeList tl) {
         setTitle("NBA Player Trading Simulator");
         setSize(WIDTH, HEIGHT);
@@ -31,6 +33,8 @@ public class ViewPendingTrades extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(0, 1));
+        JLabel image = new JLabel(new ImageIcon("data/NBA_logo.png"));
+        panel.add(image);
         panel.add(new JScrollPane(display));
         panel.add(submit);
 
@@ -38,6 +42,7 @@ public class ViewPendingTrades extends JFrame {
         setVisible(true);
     }
 
+    // Effects: print the information of pending trades.
     public String printPendingTrades(TradeList tl) {
         StringBuilder sb = new StringBuilder();
         for (int j = 0; j < tl.getPendingTrades().size(); j++) {
