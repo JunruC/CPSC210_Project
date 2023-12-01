@@ -45,11 +45,10 @@ public class SaveData extends JFrame {
         if (option1.isSelected()) {
             dispose();
             saveDataOptionOne(tl);
-            System.exit(0);
         } else if (option2.isSelected()) {
             dispose();
             JOptionPane.showMessageDialog(this, "Quit successfully.");
-            System.exit(0);
+            new PrintEvents();
         }
     }
 
@@ -69,6 +68,7 @@ public class SaveData extends JFrame {
             JOptionPane.showMessageDialog(this, "Unable to save the data.");
         } finally {
             JOptionPane.showMessageDialog(this, "Quit successfully.");
+            new PrintEvents();
         }
     }
 }

@@ -28,7 +28,7 @@ public class Read {
             for (int j = 0; j < pendingTradeData.length(); j++) {
                 JSONObject playerData = pendingTradeData.getJSONObject(j);
                 Player p = readPlayerData(playerData);
-                t.getTradedPlayers().add(p);
+                t.addPlayerToTrade(p);
             }
             tl.getPendingTrades().add(t);
         }
@@ -44,7 +44,7 @@ public class Read {
             for (int j = 0; j < completedTradeData.length(); j++) {
                 JSONObject playerData = completedTradeData.getJSONObject(j);
                 Player p = readPlayerData(playerData);
-                t.getTradedPlayers().add(p);
+                t.addPlayerToTrade(p);
             }
             tl.getCompletedTrades().add(t);
         }

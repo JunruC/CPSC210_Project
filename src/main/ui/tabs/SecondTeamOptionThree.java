@@ -49,7 +49,7 @@ public class SecondTeamOptionThree extends JFrame {
         for (Player p : t.getPlayers()) {
             if (player.equals(p.getName())) {
                 Trade trade = tl.getPendingTrades().get(tl.getPendingTrades().size() - 1);
-                trade.getTradedPlayers().add(p);
+                trade.addPlayerToTrade(p);
                 JOptionPane.showMessageDialog(this, "Player added successfully.");
                 playerInTeam = true;
                 break;

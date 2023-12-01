@@ -1,4 +1,4 @@
-package persistence;
+package test;
 
 import model.Player;
 import model.Team;
@@ -7,15 +7,18 @@ import model.TradeList;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import persistence.Read;
+import persistence.Save;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class ReadTest {
-    private Read r;
+class SaveTest {
     private Save s;
+    private Read r;
     private Player p1;
     private Player p2;
     private Player p3;
@@ -35,19 +38,19 @@ public class ReadTest {
 
     @BeforeEach
     void runBefore() {
-        r = new Read();
         s = new Save();
+        r = new Read();
 
-        p1 = new Player("Golden State Warriors","Stephen Curry","PG",35,188,83.9,51.916);
-        p2 = new Player("Golden State Warriors","Draymond Green","PF",33,198,104.3,22.321);
-        p3 = new Player("Golden State Warriors","Klay Thompson","SG",33,198,99.8,43.219);
+        p1 = new Player("Golden State Warriors", "Stephen Curry", "PG", 35, 188, 83.9, 51.916);
+        p2 = new Player("Golden State Warriors", "Draymond Green", "PF", 33, 198, 104.3, 22.321);
+        p3 = new Player("Golden State Warriors", "Klay Thompson", "SG", 33, 198, 99.8, 43.219);
 
-        p4 = new Player("Los Angeles Lakers","Anthony Davis","PF",30,208,114.8,40.600);
-        p5 = new Player("Los Angeles Lakers","LeBron James","SF",38,206,113.4,47.607);
-        p6 = new Player("Los Angeles Lakers","Austin Reaves","SG",25,196,89.4,12.015);
+        p4 = new Player("Los Angeles Lakers", "Anthony Davis", "PF", 30, 208, 114.8, 40.600);
+        p5 = new Player("Los Angeles Lakers", "LeBron James", "SF", 38, 206, 113.4, 47.607);
+        p6 = new Player("Los Angeles Lakers", "Austin Reaves", "SG", 25, 196, 89.4, 12.015);
 
-        p7 = new Player("Miami Heat","Jimmy Butler","SF",34,201,104.3,45.184);
-        p8 = new Player("Atlanta Hawks","Trae Young","PG",25,185,74.4,40.064);
+        p7 = new Player("Miami Heat", "Jimmy Butler", "SF", 34, 201, 104.3, 45.184);
+        p8 = new Player("Atlanta Hawks", "Trae Young", "PG", 25, 185, 74.4, 40.064);
 
         tr1 = new Trade();
         tr1.getTradedPlayers().add(p1);
@@ -96,33 +99,34 @@ public class ReadTest {
     }
 
     @Test
-    void testReadPendingTradesFind() {
+    void testSavePendingTradesFind() {
         try {
             s.savePendingTrades(tl, "PendingTradesFile.json");
             TradeList tradelist = new TradeList();
             r.readPendingTrades(tradelist, "PendingTradesFile.json");
             assertEquals(1, tradelist.getPendingTrades().size());
             assertEquals(2, tradelist.getPendingTrades().get(0).getTradedPlayers().size());
-            assertEquals("Stephen Curry", tradelist.getPendingTrades().get(0).getTradedPlayers().get(0).getName());
-            assertEquals("Anthony Davis", tradelist.getPendingTrades().get(0).getTradedPlayers().get(1).getName());
+            assertEquals("Stephen Curry",
+                    tradelist.getPendingTrades().get(0).getTradedPlayers().get(0).getName());
+            assertEquals("Anthony Davis",
+                    tradelist.getPendingTrades().get(0).getTradedPlayers().get(1).getName());
         } catch (IOException e) {
             fail("Unexpected exception thrown.");
         }
     }
 
     @Test
-    void testReadPendingTradesNotFind() {
+    void testSavePendingTradesNotFind() {
         try {
-            s.savePendingTrades(tl, "PendingTradesFile.json");
-            TradeList tradelist = new TradeList();
-            r.readPendingTrades(tradelist, "xxx.json");
+            s.savePendingTrades(tl, "x\0x.json");
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            // expected
         }
     }
 
     @Test
-    void testReadCompletedTradesFind() {
+    void testSaveCompletedTradesFind() {
         try {
             s.saveCompletedTrades(tl, "CompletedTradesFile.json");
             TradeList tradelist = new TradeList();
@@ -144,18 +148,17 @@ public class ReadTest {
     }
 
     @Test
-    void testReadCompletedTradesNotFind() {
+    void testSaveCompletedTradesNotFind() {
         try {
-            s.saveCompletedTrades(tl, "CompletedTradesFile.json");
-            TradeList tradelist = new TradeList();
-            r.readCompletedTrades(tradelist, "xxx.json");
+            s.saveCompletedTrades(tl, "x\0x.json");
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            // expected
         }
     }
 
     @Test
-    void testReadPendingTeamOneFind() {
+    void testSavePendingTeamOneFind() {
         try {
             s.savePendingTeamOne(tl, "PendingTeamOneFile.json");
             TradeList tradelist = new TradeList();
@@ -171,18 +174,17 @@ public class ReadTest {
     }
 
     @Test
-    void testReadPendingTeamOneNotFind() {
+    void testSavePendingTeamOneNotFind() {
         try {
-            s.savePendingTeamOne(tl, "PendingTeamOneFile.json");
-            TradeList tradelist = new TradeList();
-            r.readPendingTeamOne(tradelist, "xxx.json");
+            s.savePendingTeamOne(tl, "x\0x.json");
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            // expected
         }
     }
 
     @Test
-    void testReadPendingTeamTwoFind() {
+    void testSavePendingTeamTwoFind() {
         try {
             s.savePendingTeamTwo(tl, "PendingTeamTwoFile.json");
             TradeList tradelist = new TradeList();
@@ -198,18 +200,17 @@ public class ReadTest {
     }
 
     @Test
-    void testReadPendingTeamTwoNotFind() {
+    void testSavePendingTeamTwoNotFind() {
         try {
-            s.savePendingTeamTwo(tl, "PendingTeamTwoFile.json");
-            TradeList tradelist = new TradeList();
-            r.readPendingTeamTwo(tradelist, "xxx.json");
+            s.savePendingTeamTwo(tl, "x\0x.json");
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            // expected
         }
     }
 
     @Test
-    void testReadCompletedTeamOneFind() {
+    void testSaveCompletedTeamOneFind() {
         try {
             s.saveCompletedTeamOne(tl, "CompletedTeamOneFile.json");
             TradeList tradelist = new TradeList();
@@ -229,18 +230,17 @@ public class ReadTest {
     }
 
     @Test
-    void testReadCompletedTeamOneNotFind() {
+    void testSaveCompletedTeamOneNotFind() {
         try {
-            s.saveCompletedTeamOne(tl, "CompletedTeamOneFile.json");
-            TradeList tradelist = new TradeList();
-            r.readCompletedTeamOne(tradelist, "xxx.json");
+            s.saveCompletedTeamOne(tl, "x\0x.json");
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            // expected
         }
     }
 
     @Test
-    void testReadCompletedTeamTwoFind() {
+    void testSaveCompletedTeamTwoFind() {
         try {
             s.saveCompletedTeamTwo(tl, "CompletedTeamTwoFile.json");
             TradeList tradelist = new TradeList();
@@ -260,18 +260,17 @@ public class ReadTest {
     }
 
     @Test
-    void testReadCompletedTeamTwoNotFind() {
+    void testSaveCompletedTeamTwoNotFind() {
         try {
-            s.saveCompletedTeamTwo(tl, "CompletedTeamTwoFile.json");
-            TradeList tradelist = new TradeList();
-            r.readCompletedTeamTwo(tradelist, "xxx.json");
+            s.saveCompletedTeamTwo(tl, "x\0x.json");
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            // expected
         }
     }
 
     @Test
-    void testReadSuccessFind() {
+    void testSaveSuccessFind() {
         try {
             s.saveSuccess(tl, "SuccessFile.json");
             TradeList tradelist = new TradeList();
@@ -285,27 +284,75 @@ public class ReadTest {
     }
 
     @Test
-    void testReadSuccessNotFind() {
+    void testSaveSuccessNotFind() {
         try {
-            s.saveSuccess(tl, "SuccessFile.json");
-            TradeList tradelist = new TradeList();
-            r.readSuccess(tradelist, "xxx.json");
+            s.saveSuccess(tl, "x\0x.json");
             fail("Expected exception not thrown.");
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            // expected
         }
     }
 
     @Test
-    void testReadPlayerData() {
-        JSONObject savePlayerData = new JSONObject();
-        s.savePlayerData(savePlayerData, p1);
-        Player p = r.readPlayerData(savePlayerData);
-        assertEquals("Golden State Warriors", p.getTeam());
-        assertEquals("Stephen Curry", p.getName());
-        assertEquals("PG", p.getPosition());
-        assertEquals(35, p.getAge());
-        assertEquals(188, p.getHeight());
-        assertEquals(83.9, p.getWeight());
-        assertEquals(51.916, p.getSalary());
+    void testSavePlayerData() {
+        JSONObject playerData = new JSONObject();
+        s.savePlayerData(playerData, p1);
+        assertEquals("Golden State Warriors", playerData.get("team"));
+        assertEquals("Stephen Curry", playerData.get("name"));
+        assertEquals("PG", playerData.get("position"));
+        assertEquals(35, playerData.get("age"));
+        assertEquals(188, playerData.get("height"));
+        assertEquals(83.9, playerData.get("weight"));
+        assertEquals(51.916, playerData.get("salary"));
+    }
+
+    @Test
+    void testClearDataFind() {
+        try {
+            s.savePendingTrades(tl, "PendingTradesFile.json");
+            s.saveCompletedTrades(tl, "CompletedTradesFile.json");
+            s.savePendingTeamOne(tl, "PendingTeamOneFile.json");
+            s.savePendingTeamTwo(tl, "PendingTeamTwoFile.json");
+            s.saveCompletedTeamOne(tl, "CompletedTeamOneFile.json");
+            s.saveCompletedTeamTwo(tl, "CompletedTeamTwoFile.json");
+            s.saveSuccess(tl, "SuccessFile.json");
+            s.clearData("PendingTradesFile.json","CompletedTradesFile.json","PendingTeamOneFile.json",
+                    "PendingTeamTwoFile.json","CompletedTeamOneFile.json","CompletedTeamTwoFile.json",
+                    "SuccessFile.json");
+            TradeList tradelist = new TradeList();
+            r.readPendingTrades(tradelist, "PendingTradesFile.json");
+            r.readCompletedTrades(tradelist, "CompletedTradesFile.json");
+            r.readPendingTeamOne(tradelist, "PendingTeamOneFile.json");
+            r.readPendingTeamTwo(tradelist, "PendingTeamTwoFile.json");
+            r.readCompletedTeamOne(tradelist, "CompletedTeamOneFile.json");
+            r.readCompletedTeamTwo(tradelist, "CompletedTeamTwoFile.json");
+            r.readSuccess(tradelist, "SuccessFile.json");
+            assertEquals(0, tradelist.getPendingTrades().size());
+            assertEquals(0, tradelist.getCompletedTrades().size());
+            assertEquals(0, tradelist.getPendingTeamOne().size());
+            assertEquals(0, tradelist.getPendingTeamTwo().size());
+            assertEquals(0, tradelist.getCompletedTeamOne().size());
+            assertEquals(0, tradelist.getCompletedTeamTwo().size());
+            assertEquals(0, tradelist.getSuccess().size());
+        } catch (IOException e) {
+            fail("Unexpected exception thrown.");
+        }
+    }
+
+    @Test
+    void testClearDataNotFind() {
+        try {
+            s.savePendingTrades(tl, "PendingTradesFile.json");
+            s.saveCompletedTrades(tl, "CompletedTradesFile.json");
+            s.savePendingTeamOne(tl, "PendingTeamOneFile.json");
+            s.savePendingTeamTwo(tl, "PendingTeamTwoFile.json");
+            s.saveCompletedTeamOne(tl, "CompletedTeamOneFile.json");
+            s.saveCompletedTeamTwo(tl, "CompletedTeamTwoFile.json");
+            s.saveSuccess(tl, "SuccessFile.json");
+            s.clearData("a\0a.json","b\1b.json","c\2c.json", "d\3d.json","e\4e.json","f\5f.json", "g\6g.json");
+            fail("Expected exception not thrown.");
+        } catch (FileNotFoundException e) {
+            // expected
+        }
     }
 }

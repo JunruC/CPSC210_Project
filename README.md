@@ -45,3 +45,22 @@ Therefore, I want to design an application that allows me to view the trades fro
   you want to save the current progress?" when you quit the application.
 - You can reload the state of my application by clicking the button labelled "Yes" when prompted with a message window 
   "Do you want to reload the recent progress?" when you start the application.
+
+## Phase 4: Task 2
+- A trade is added to the pending trade list.
+- All trades are removed from the pending trade list.
+- All trades in the pending trade list are viewed.
+
+## Phase 4: Task 3
+- Firstly, I want to delete the pendingTeamOne, pendingTeamTwo, completedTeamOne, completedTeamTwo, and success fields
+  in TradeList class. After that, I am going to change these List of Team to Team, the List of Boolean to Boolean and 
+  then add them to Trade class. I think all these fields are more likely to be parts of a trade, so it should be stored
+  in trade. Besides, a TradeList class that stores these fields through several lists requires the positions of all 
+  elements in each trade to be the same in every list. If any list among them has an error, lots of the elements will be
+  mismatched, which will lead to a huge system error. However, if I store these fields in the Trade class, no big error
+  will occur, and it will be easier to debug.
+- Secondly, I want to make my similar classes extend super classes. After I finished coding, I discovered that a
+  couple of my classes had pretty similar methods, and they shared pretty similar characteristics. Therefore, creating
+  super classes and extending similar classes to them will help me to classify the classes in order to obtain a better 
+  structure for my project. Moreover, I want to put the similar methods of some classes to the super classes because 
+  this will reduce the length of unnecessary codes as well as coupling.

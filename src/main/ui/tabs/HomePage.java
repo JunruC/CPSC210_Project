@@ -49,7 +49,7 @@ public class HomePage extends JFrame {
         } else if (option1.isSelected()) {
             dispose();
             Trade t = new Trade();
-            tl.getPendingTrades().add(t);
+            tl.addPendingTrade(t);
             new MakeFirstTeam(tl);
         } else if (option2.isSelected()) {
             doOption2(tl);

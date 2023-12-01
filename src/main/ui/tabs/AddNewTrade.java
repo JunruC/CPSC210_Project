@@ -44,7 +44,7 @@ public class AddNewTrade extends JFrame {
         if (option1.isSelected()) {
             dispose();
             Trade t0 = new Trade();
-            tl.getPendingTrades().add(t0);
+            tl.addPendingTrade(t0);
             new MakeFirstTeam(tl);
         } else if (option2.isSelected()) {
             dispose();

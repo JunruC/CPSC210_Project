@@ -58,7 +58,7 @@ public class MakeSecondTeam extends JFrame {
                         Double.parseDouble(data[5]),Double.parseDouble(data[6]));
                 t2.getPlayers().add(p);
             }
-            tl.getPendingTeamTwo().add(t2);
+            tl.addPendingTeamTwo(t2);
             answer = null;
             dispose();
             new ProcessSecondTeam(t2, tl);

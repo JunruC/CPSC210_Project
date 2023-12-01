@@ -48,9 +48,9 @@ public class ConductTrades extends JFrame {
             for (int i = 0; i < tl.getPendingTrades().size(); i++) {
                 processTrade(tl, i, sb);
             }
-            tl.getPendingTrades().clear();
-            tl.getPendingTeamOne().clear();
-            tl.getPendingTeamTwo().clear();
+            tl.clearPendingTrades();
+            tl.clearPendingTeamOne();
+            tl.clearPendingTeamTwo();
             new TradeResults(tl,sb);
         } else if (option2.isSelected()) {
             dispose();
@@ -73,16 +73,16 @@ public class ConductTrades extends JFrame {
             ct2.getPlayers().add(tl.getPendingTeamTwo().get(i).getPlayers().get(k));
         }
         Boolean success = tradeInProcess.conductTrade(tl.getPendingTeamOne().get(i),
-                tl.getPendingTeamTwo().get(i), tradeInProcess);
-        tl.getSuccess().add(success);
-        tl.getCompletedTrades().add(tradeInProcess);
+                tl.getPendingTeamTwo().get(i));
+        tl.addSuccess(success);
+        tl.addCompletedTrade(tradeInProcess);
         if (success) {
-            tl.getCompletedTeamOne().add(tl.getPendingTeamOne().get(i));
-            tl.getCompletedTeamTwo().add(tl.getPendingTeamTwo().get(i));
+            tl.addCompletedTeamOne(tl.getPendingTeamOne().get(i));
+            tl.addCompletedTeamTwo(tl.getPendingTeamTwo().get(i));
             sb.append("Trade completed!").append("\n");
         } else {
-            tl.getCompletedTeamOne().add(ct1);
-            tl.getCompletedTeamTwo().add(ct2);
+            tl.addCompletedTeamOne(ct1);
+            tl.addCompletedTeamTwo(ct2);
             sb.append("Trade failed.").append("\n");
         }
     }

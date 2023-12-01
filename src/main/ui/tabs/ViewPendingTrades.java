@@ -1,6 +1,5 @@
 package ui.tabs;
 
-import model.Player;
 import model.TradeList;
 
 import javax.swing.*;
@@ -12,7 +11,6 @@ public class ViewPendingTrades extends JFrame {
     public static final int HEIGHT = 800;     // height of the tab
     private JTextArea display;                // display area in the tab
     private JButton submit;                   // ok button in the tab
-    public static final String TAB = "    ";  // indent
 
     // Effects: construct the tab with title, size, display area, and ok button.
     public ViewPendingTrades(TradeList tl) {
@@ -20,7 +18,7 @@ public class ViewPendingTrades extends JFrame {
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        display = new JTextArea(printPendingTrades(tl));
+        display = new JTextArea(tl.printPendingTrades());
         display.setEditable(false);
         display.setLineWrap(true);
         display.setWrapStyleWord(true);
@@ -40,17 +38,5 @@ public class ViewPendingTrades extends JFrame {
 
         getContentPane().add(panel);
         setVisible(true);
-    }
-
-    // Effects: print the information of pending trades.
-    public String printPendingTrades(TradeList tl) {
-        StringBuilder sb = new StringBuilder();
-        for (int j = 0; j < tl.getPendingTrades().size(); j++) {
-            sb.append("Players in trade No." + (j + 1) + ": ").append("\n");
-            for (Player p : tl.getPendingTrades().get(j).getTradedPlayers()) {
-                sb.append(TAB + p.getName() + " from " + p.getTeam()).append("\n");
-            }
-        }
-        return sb.toString();
     }
 }
